@@ -123,12 +123,24 @@ registerSketch('sk2', function (p) {
     const { rawH, h12, m } = t;
 
     const lineCol = rawH >= 12 ? p.color(30) : p.color(20, 130, 70);
+    const fillCol = p.color(220, 90, 90, 70); // light red
 
     const x0 = xFromMinute(0);
     const y0 = yFromHour(h12);
 
     const x1 = xFromMinute(m);
     const y1 = yFromHour(0);
+
+    // shaded triangular area
+    p.push();
+    p.noStroke();
+    p.fill(fillCol);
+    p.beginShape();
+    p.vertex(x0, y1);
+    p.vertex(x0, y0);
+    p.vertex(x1, y1);
+    p.endShape(p.CLOSE);
+    p.pop();
 
     // main line
     p.push();
