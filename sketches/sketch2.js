@@ -61,10 +61,40 @@ registerSketch('sk2', function (p) {
     p.pop();
   }
 
+  function drawTicks(color, textSize) {
+    const axisCol = p.color(color);
+
+    p.push();
+    p.fill(axisCol);
+    p.textSize(textSize);
+
+    //x-axis ticks
+    for (const mm of [0, 20, 40, 60]) {
+      const x = xFromMinute(mm);
+      p.stroke(axisCol);
+      p.line(x, plotBottom(), x, plotBottom() + 8);
+      p.noStroke();
+      p.textAlign(p.CENTER, p.TOP);
+      p.text(mm, x, plotBottom() + 12);
+    }
+
+    //y-axis ticks
+    for (const hh of [3, 6, 9, 12]) {
+      const y = yFromHour(hh);
+      p.stroke(axisCol);
+      p.line(plotLeft() - 8, y, plotLeft(), y);
+      p.noStroke();
+      p.textAlign(p.RIGHT, p.CENTER);
+      p.text(hh, plotLeft() - 12, y);
+    }
+    p.pop();
+  }
+
   p.draw = function () {
     p.background(248);
     drawAxes();
     drawGrid();
+    drawTicks(30, 12);
   };
 
 });
