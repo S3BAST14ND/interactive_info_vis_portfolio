@@ -119,12 +119,33 @@ registerSketch('sk2', function (p) {
     p.pop();
   }
 
+  function drawGraphEncoding(t) {
+    const { rawH, h12, m } = t;
+
+    const lineCol = rawH >= 12 ? p.color(30) : p.color(20, 130, 70);
+
+    const x0 = xFromMinute(0);
+    const y0 = yFromHour(h12);
+
+    const x1 = xFromMinute(m);
+    const y1 = yFromHour(0);
+
+    // main line
+    p.push();
+    p.stroke(lineCol);
+    p.strokeWeight(4);
+    p.line(x0, y0, x1, y1);
+    p.pop();
+  }
+
   p.draw = function () {
+    const t = getTimeParts();
     p.background(248);
     drawAxes();
     drawGrid();
     drawTicks(30, 12, 6, 4); //minute, hour
     drawLabels(12, 6, 4) //see above
+    drawGraphEncoding(t)
   };
 
 });
