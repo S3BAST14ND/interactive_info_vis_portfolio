@@ -23,6 +23,17 @@ registerSketch('sk2', function (p) {
     p.createCanvas(W, H);
     p.textFont('system-ui');
   };
+  
+  //function to get time parts, hour and minute, which are 0-23, 0-59
+  function getTimeParts() {
+    const rawH = p.hour();
+    const m = p.minute();
+
+    let h12 = rawH % 12;
+    if (h12 === 0) h12 = 12;
+
+    return { rawH, h12, m };
+  }
 
   p.draw = function () {
     p.background(248);
