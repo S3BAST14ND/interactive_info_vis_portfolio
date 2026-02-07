@@ -90,11 +90,31 @@ registerSketch('sk2', function (p) {
     p.pop();
   }
 
+  function drawLabels () {
+    p.push();
+    p.fill(40);
+    p.noStroke();
+    p.textSize(14);
+
+    p.textAlign(p.CENTER, p.TOP);
+    p.text('minutes', (plotLeft() + plotRight()) / 2, plotBottom() + 44);
+
+    p.push();
+    p.translate(plotLeft() - 58, (plotTop() + plotBottom()) / 2);
+    p.rotate(-p.HALF_PI);
+    p.textAlign(p.CENTER, p.TOP);
+    p.text('hours', 0, 0);
+    p.pop();
+
+    p.pop();
+  }
+
   p.draw = function () {
     p.background(248);
     drawAxes();
     drawGrid();
     drawTicks(30, 12);
+    drawLabels()
   };
 
 });
