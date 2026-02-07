@@ -44,9 +44,27 @@ registerSketch('sk2', function (p) {
     p.pop();
   }
 
+  function drawGrid() {
+    p.push();
+    p.stroke(0, 0, 0, 25);
+    p.strokeWeight(1);
+
+    for (let mm = 0; mm <= 60; mm += 10) {
+      const x = xFromMinute(mm);
+      p.line(x, plotTop(), x, plotBottom());
+    }
+
+    for (let hh = 0; hh <= 12; hh += 3) {
+      const y = yFromHour(hh);
+      p.line(plotLeft(), y, plotRight(), y);
+    }
+    p.pop();
+  }
+
   p.draw = function () {
     p.background(248);
     drawAxes();
+    drawGrid();
   };
 
 });
