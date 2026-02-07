@@ -61,7 +61,7 @@ registerSketch('sk2', function (p) {
     p.pop();
   }
 
-  function drawTicks(color, textSize) {
+  function drawTicks(color, textSize, numMinuteTicks, numHourTicks) {
     const axisCol = p.color(color);
 
     p.push();
@@ -69,41 +69,51 @@ registerSketch('sk2', function (p) {
     p.textSize(textSize);
 
     //x-axis ticks
-    for (const mm of [0, 20, 40, 60]) {
-      const x = xFromMinute(mm);
-      p.stroke(axisCol);
-      p.line(x, plotBottom(), x, plotBottom() + 8);
-      p.noStroke();
+    for (let i = 0; i <= numMinuteTicks; i++) {
+      const minuteVal = (60 / numMinuteTicks) * i;
+      const x = xFromMinute(minuteVal);
+        p.line(x, plotBottom(), x, plotBottom() + 8);
+        p.noStroke();
       p.textAlign(p.CENTER, p.TOP);
-      p.text(mm, x, plotBottom() + 12);
-    }
-
-    //y-axis ticks
-    for (const hh of [3, 6, 9, 12]) {
-      const y = yFromHour(hh);
+      p.text(Math.round(minuteVal), x, plotBottom() + 12);
       p.stroke(axisCol);
+    }
+  
+    for (let i = 0; i <= numHourTicks; i++) {
+      const hourVal = (12 / numHourTicks) * i;
+      const y = yFromHour(hourVal);
+  
       p.line(plotLeft() - 8, y, plotLeft(), y);
+  
       p.noStroke();
       p.textAlign(p.RIGHT, p.CENTER);
-      p.text(hh, plotLeft() - 12, y);
+      p.text(Math.round(hourVal), plotLeft() - 12, y);
+      p.stroke(axisCol);
     }
+
     p.pop();
   }
 
-  function drawLabels () {
+  function drawLabels (textSize, minuteTicks, hourTicks) {
     p.push();
     p.fill(40);
     p.noStroke();
-    p.textSize(14);
+    p.textSize(textSize);
 
     p.textAlign(p.CENTER, p.TOP);
-    p.text('minutes', (plotLeft() + plotRight()) / 2, plotBottom() + 44);
+    p.text(
+      `minutes (${minuteTicks} ticks)`,
+      (plotLeft() + plotRight()) / 2,
+      plotBottom() + 44
+    );
 
     p.push();
     p.translate(plotLeft() - 58, (plotTop() + plotBottom()) / 2);
     p.rotate(-p.HALF_PI);
     p.textAlign(p.CENTER, p.TOP);
-    p.text('hours', 0, 0);
+    p.text(
+      `hours (${hourTicks} ticks)`, 0, 0
+    );    
     p.pop();
 
     p.pop();
@@ -113,8 +123,8 @@ registerSketch('sk2', function (p) {
     p.background(248);
     drawAxes();
     drawGrid();
-    drawTicks(30, 12);
-    drawLabels()
+    drawTicks(30, 12, 6, 4); //minute, hour
+    drawLabels(12, 6, 4) //see above
   };
 
 });
