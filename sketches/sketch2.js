@@ -123,7 +123,7 @@ registerSketch('sk2', function (p) {
     const { rawH, h12, m } = t;
 
     const lineCol = rawH >= 12 ? p.color(30) : p.color(20, 130, 70);
-    const fillCol = p.color(220, 90, 90, 70); // light red
+    const fillCol = p.color(220, 90, 90, 70);
 
     const x0 = xFromMinute(0);
     const y0 = yFromHour(h12);
@@ -150,6 +150,28 @@ registerSketch('sk2', function (p) {
     p.pop();
   }
 
+function drawSecondsBall(t) {
+  const { h12, m } = t;
+
+  const x0 = xFromMinute(0);
+  const y0 = yFromHour(h12);
+
+  const x1 = xFromMinute(m);
+  const y1 = yFromHour(0);
+
+  const u = p.second() / 60;
+  const ballX = p.lerp(x0, x1, u);
+  const ballY = p.lerp(y0, y1, u);
+
+  const lineCol = t.rawH >= 12 ? p.color(30) : p.color(20, 130, 70);
+
+  p.push();
+  p.noStroke();
+  p.fill(lineCol);
+  p.circle(ballX, ballY, 10);
+  p.pop();
+}
+
   p.draw = function () {
     const t = getTimeParts();
     p.background(248);
@@ -158,6 +180,7 @@ registerSketch('sk2', function (p) {
     drawTicks(30, 12, 6, 4); //minute, hour
     drawLabels(12, 6, 4) //see above
     drawGraphEncoding(t)
+    drawSecondsBall(t)
   };
 
 });
