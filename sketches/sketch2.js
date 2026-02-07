@@ -35,8 +35,18 @@ registerSketch('sk2', function (p) {
     return { rawH, h12, m };
   }
 
+  function drawAxes() {
+    p.push();
+    p.stroke(30);
+    p.strokeWeight(2);
+    p.line(plotLeft(), plotBottom(), plotRight(), plotBottom());
+    p.line(plotLeft(), plotTop(), plotLeft(), plotBottom());
+    p.pop();
+  }
+
   p.draw = function () {
     p.background(248);
+    drawAxes();
   };
 
 });
