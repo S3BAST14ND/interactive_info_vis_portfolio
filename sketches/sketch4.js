@@ -431,6 +431,13 @@ registerSketch('sk4', function (p) {
   p.draw = function () {
     ensureUI();
     const nowMs = p.millis();
+
+  if (running && durationMs > 0 && remainingMs(nowMs) <= 0) {
+    running = false;
+    lit = false;
+    sparks.length = 0;
+    statusText = "Time's up — candle extinguished. Drag match to relight.";
+  }
   
     drawBackground();
     drawHolder();
