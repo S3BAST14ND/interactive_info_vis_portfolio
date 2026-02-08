@@ -57,44 +57,48 @@ registerSketch('sk3', function (p) {
     const y = rowY();
     const logW = 18;
     const logH = 140;
-
+  
     const currentIdx = t.h12 - 1;
-    const visibleHCurrent = logH * (1 - t.m / 60);
-
+  
+    const quarter = Math.floor(t.m / 15);
+    const visibleFrac = 1 - quarter * 0.25;
+    const visibleHCurrent = logH * visibleFrac;
+  
+    const minVisibleH = 24;
+  
     const dryLogCol = p.color(160, 120, 80);
     const wetLogCol = p.color(100, 65, 30);
-
+  
     p.push();
     p.rectMode(p.CENTER);
     p.noStroke();
-
+  
     for (let i = 0; i < LOGS; i++) {
       const x = logX(i);
       const topY = y - logH / 2;
-
+  
       if (i < currentIdx) {
-        //fully submerged
+        const h = minVisibleH;
+        const centerY = topY + h / 2;
+  
         p.fill(wetLogCol);
-        p.circle(x, topY + 10, 8);
-
+        p.rect(x, centerY, logW, h, 6);
+        p.circle(x, topY + 6, logW * 0.45);
+  
       } else if (i === currentIdx) {
-        //partially submerged
-        if (visibleHCurrent <= 8) {
-          p.fill(wetLogCol);
-          p.circle(x, topY + 10, 8);
-        } else {
-          const centerY = topY + visibleHCurrent / 2;
-          p.fill(wetLogCol);
-          p.rect(x, centerY, logW, visibleHCurrent, 6);
-        }
-
+        const h = Math.max(visibleHCurrent, minVisibleH);
+        const centerY = topY + h / 2;
+  
+        p.fill(wetLogCol);
+        p.rect(x, centerY, logW, h, 6);
+        p.circle(x, topY + 6, logW * 0.45);
+  
       } else {
-        //future logs
         p.fill(dryLogCol);
         p.rect(x, y, logW, logH, 6);
       }
     }
-
+  
     p.pop();
   }
 
