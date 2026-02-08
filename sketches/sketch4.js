@@ -378,14 +378,15 @@ registerSketch('sk4', function (p) {
   };
 
   p.draw = function () {
+    ensureUI();
     const nowMs = p.millis();
-
+  
     drawBackground();
     drawHolder();
-
+  
     const c = drawCandle(nowMs);
     updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
-
+  
     drawMatch();
     drawSnuffer();
     drawHUD();
