@@ -77,10 +77,9 @@ registerSketch('sk4', function (p) {
     p.pop();
   }
 
-  //testing only, remove
   function progress01(nowMs) {
-    if (!running || startMs === null || durationMs <= 0) return 0;
-    return p.constrain((nowMs - startMs) / durationMs, 0, 1);
+    if (durationMs <= 0) return 0;
+    return clamp(1 - remainingMs(nowMs) / durationMs, 0, 1);
   }
 
   function drawCandle(nowMs) {
