@@ -201,6 +201,53 @@ registerSketch('sk3', function (p) {
     p.pop();
   }
 
+  function birdPoleIndex(t) {
+    let idx = Math.floor(t.m / 5); // 0..11
+    if (idx > 11) idx = 11;
+    return idx;
+  }
+  
+  function drawBirdOnPole(t) {
+    const idx = birdPoleIndex(t);
+    const x = logX(idx);
+  
+    const y = rowY();
+    const logH = 140;
+    const topY = y - logH / 2;
+  
+    // perch just above the log tops
+    const perchY = topY - 8;
+  
+    // subtle wing wiggle (soothing)
+    const wing = 1.8 * p.sin((t.s / 60) * p.TWO_PI);
+  
+    p.push();
+  
+    // body + head
+    p.noStroke();
+    p.fill(35, 35, 35, 220);
+    p.ellipse(x, perchY, 14, 10);
+    p.circle(x + 7, perchY - 3, 7);
+  
+    // beak
+    p.fill(230, 170, 70, 220);
+    p.triangle(x + 10, perchY - 3, x + 16, perchY - 1, x + 10, perchY + 1);
+  
+    // wing stroke
+    p.noFill();
+    p.stroke(35, 35, 35, 190);
+    p.strokeWeight(2);
+    p.arc(x - 2, perchY + 1, 16, 10 + wing, p.PI + 0.4, p.TWO_PI - 0.4);
+  
+    // legs
+    p.stroke(35, 35, 35, 200);
+    p.strokeWeight(1.8);
+    p.line(x + 2, perchY + 5, x + 1, perchY + 10);
+    p.line(x + 5, perchY + 5, x + 6, perchY + 10);
+  
+    p.pop();
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont('system-ui');
@@ -216,7 +263,7 @@ registerSketch('sk3', function (p) {
     drawBackground();
     drawTide(shorelineXAtY);
     drawLogs(t);
+    drawBirdOnPole(t);
     drawSunMoon(t);
   };
-
 });
