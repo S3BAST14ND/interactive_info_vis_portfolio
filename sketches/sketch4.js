@@ -404,6 +404,19 @@ registerSketch('sk4', function (p) {
     statusText = "Reset. Drag match to wick to light. Drag snuffer to extinguish.";
   }
 
+  function extinguishAndReset() {
+    resetAll();
+    statusText = "Extinguished. Set minutes if needed, then relight with the match.";
+  }
+  
+  function tryExtinguishIfOverWick(wickTopX, wickTopY) {
+    if (!lit && !running) return;
+  
+    const mouth = snufferMouthPos();
+    const d = p.dist(mouth.x, mouth.y, wickTopX, wickTopY);
+    if (d <= 28) extinguishAndReset();
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
