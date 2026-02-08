@@ -43,12 +43,25 @@ registerSketch('sk3', function (p) {
     p.pop();
   }
 
+  const LOGS = 12;
+
+  function logX(i) {
+    return p.lerp(
+      plotLeft() + 70,
+      plotRight() - 40,
+      i / (LOGS - 1)
+    );
+  }
+
+
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
   };
 
 
   p.draw = function () {
+    const t = getTimeParts();
+
     drawBackground();
   };
 
