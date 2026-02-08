@@ -129,6 +129,69 @@ registerSketch('sk4', function (p) {
     }
   }
 
+  function updateAndDrawFlame(nowMs, wickX, wickY, candleH) {
+    const rem = remainingMs(nowMs);
+    if (!lit || !running || durationMs <= 0 || rem <= 0 || candleH <= 12) return;
+
+    // flame glow "breathes" using noise
+    const t = nowMs * 0.001;
+    const glow = 0.6 + 0.6 * p.noise(t * 1.7, 50);
+    const glowR = 34 + 26 * glow;
+
+    // soft glow halo
+    p.push();
+    p.noStroke();
+    p.fill(255, 190, 90, 35);
+    p.circle(wickX, wickY - 10, glowR * 2);
+
+    p.fill(255, 220, 140, 55);
+    p.circle(wickX, wickY - 10, glowR * 1.25);
+
+    // small bright core (not a teardrop)
+    p.fill(255, 245, 200, 210);
+    p.circle(wickX + p.random(-0.8, 0.8), wickY - 12 + p.random(-0.8, 0.8), 10 + 6 * glow);
+    p.pop();
+
+    // spawn + draw sparks
+    spawnSparks(wickX, wickY);
+
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const sp = sparks[i];
+
+      // turbulence
+      const n = p.noise(sp.t + nowMs * 0.0007);
+      sp.vx += (n - 0.5) * 0.05;
+
+      sp.x += sp.vx;
+      sp.y += sp.vy;
+
+      sp.life -= 1;
+      sp.r *= 0.985;
+
+      const alpha = clamp(sp.life / 45, 0, 1) * 220;
+
+      p.push();
+      p.noStroke();
+      p.fill(255, 210, 120, alpha);
+      p.circle(sp.x, sp.y, sp.r * 2);
+      p.pop();
+
+      if (sp.life <= 0 || sp.r < 0.8) sparks.splice(i, 1);
+    }
+  }
+
+  //flame particles - testing
+  const MAX_SPARKS = 160;
+  let sparks = [];
+
+  //helpers
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function remainingMs(nowMs) {
+    if (!running || startMs === null || durationMs <= 0) return 0;
+    return Math.max(0, durationMs - (nowMs - startMs));
+  }
+
   //testing
   p.setup = function () {
     p.createCanvas(W, H);
@@ -137,6 +200,7 @@ registerSketch('sk4', function (p) {
     durationMs = 30 * 1000;
     startMs = p.millis();
     running = true;
+    lit = true;
   };
 
   p.draw = function () {
@@ -146,6 +210,7 @@ registerSketch('sk4', function (p) {
     drawHolder();
     
     const c = drawCandle(nowMs);
+    updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
 
   };
 });
