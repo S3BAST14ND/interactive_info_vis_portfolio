@@ -254,6 +254,39 @@ registerSketch('sk4', function (p) {
     return { x: snuffer.x, y: snuffer.y + snuffer.h * 0.18 };
   }
 
+  function mouseInCanvas() {
+    return !(p.mouseX < 0 || p.mouseX > W || p.mouseY < 0 || p.mouseY > H);
+  }
+
+  p.mousePressed = function () {
+    if (!mouseInCanvas()) return;
+
+    {
+      const withinX = (p.mouseX >= match.x) && (p.mouseX <= match.x + match.w);
+      const withinY = (p.mouseY >= match.y - match.h) && (p.mouseY <= match.y + match.h);
+      if (withinX && withinY) {
+        match.dragging = true;
+        match.grabDx = match.x - p.mouseX;
+        match.grabDy = match.y - p.mouseY;
+        return;
+      }
+    }
+
+    {
+      const left = snuffer.x - snuffer.w / 2 - snuffer.handleL;
+      const right = snuffer.x + snuffer.w / 2;
+      const top = snuffer.y - snuffer.h / 2 - 12;
+      const bottom = snuffer.y + snuffer.h / 2 + 12;
+
+      if (p.mouseX >= left && p.mouseX <= right && p.mouseY >= top && p.mouseY <= bottom) {
+        snuffer.dragging = true;
+        snuffer.grabDx = snuffer.x - p.mouseX;
+        snuffer.grabDy = snuffer.y - p.mouseY;
+        return;
+      }
+    }
+  };
+
   //flame particles - testing
   const MAX_SPARKS = 160;
   let sparks = [];
