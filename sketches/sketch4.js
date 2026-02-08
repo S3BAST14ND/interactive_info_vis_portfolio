@@ -325,8 +325,9 @@ registerSketch('sk4', function (p) {
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
   function remainingMs(nowMs) {
-    if (!running || startMs === null || durationMs <= 0) return 0;
-    return Math.max(0, durationMs - (nowMs - startMs));
+    if (!running || startMs === null) return durationMs;
+    if (durationMs <= 0) return 0;
+    return clamp(durationMs - (nowMs - startMs), 0, durationMs);
   }
 
   function readMinutes() {
