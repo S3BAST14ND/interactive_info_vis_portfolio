@@ -106,6 +106,24 @@ registerSketch('sk3', function (p) {
     };
   }
 
+  function drawTide(shorelineXAtY) {
+    p.push();
+    p.noStroke();
+    p.fill(200);
+
+    p.beginShape();
+    p.vertex(plotLeft(), plotTop());
+    p.vertex(plotLeft(), plotBottom());
+
+    for (let y = plotBottom(); y >= plotTop(); y -= 12) {
+      p.vertex(shorelineXAtY(y), y);
+    }
+
+    p.endShape(p.CLOSE);
+    p.pop();
+  }
+
+
 
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
@@ -114,9 +132,12 @@ registerSketch('sk3', function (p) {
 
   p.draw = function () {
     const t = getTimeParts();
+    const shorelineXAtY = makeShorelineXAtY(t);
+
 
     drawBackground();
     drawLogs(t);
+    drawTide(shorelineXAtY)
   };
 
   p.windowResized = function () { p.resizeCanvas(p.windowWidth, p.windowHeight); };
