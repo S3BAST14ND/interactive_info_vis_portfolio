@@ -366,6 +366,22 @@ registerSketch('sk4', function (p) {
     setDurationFromInput();
   }
 
+  function lightCandle() {
+    if (lit || running) return;
+    if (!setDurationFromInput()) return;
+  
+    lit = true;
+    running = true;
+    startMs = p.millis();
+    statusText = "Burning… Drag snuffer to extinguish.";
+  }
+  
+  function tryLightIfTouchingWick(wickTopX, wickTopY) {
+    const tip = matchTipPos();
+    const d = p.dist(tip.x, tip.y, wickTopX, wickTopY);
+    if (d <= 18) lightCandle();
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
