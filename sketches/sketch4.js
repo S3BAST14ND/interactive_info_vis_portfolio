@@ -33,6 +33,19 @@ registerSketch('sk4', function (p) {
     grabDy: 0
   };
 
+  const snuffer = {
+    x0: W * 0.22,
+    y0: H * 0.22,
+    x:  W * 0.22,
+    y:  H * 0.22,
+    w:  46,
+    h:  48,
+    handleL: 80,
+    dragging: false,
+    grabDx: 0,
+    grabDy: 0
+  };
+
   function drawBackground() {
     p.background(248);
 
@@ -211,6 +224,29 @@ registerSketch('sk4', function (p) {
     p.pop();
   }
 
+  function drawSnuffer() {
+    p.push();
+    p.translate(snuffer.x, snuffer.y);
+
+    // handle
+    p.stroke(80);
+    p.strokeWeight(6);
+    p.line(-snuffer.handleL, -snuffer.h * 0.2, -snuffer.w * 0.15, -snuffer.h * 0.2);
+    p.noStroke();
+
+    // cap
+    p.fill(120);
+    p.rectMode(p.CENTER);
+    p.rect(0, 0, snuffer.w, snuffer.h, 10);
+
+    // opening
+    p.fill(95);
+    p.rect(0, snuffer.h * 0.18, snuffer.w * 0.8, snuffer.h * 0.45, 10);
+
+    p.pop();
+  }
+
+
 
   //flame particles - testing
   const MAX_SPARKS = 160;
@@ -245,5 +281,6 @@ registerSketch('sk4', function (p) {
     updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
 
     drawMatch();
+    drawSnuffer();
   };
 });
