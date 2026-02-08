@@ -20,6 +20,19 @@ registerSketch('sk4', function (p) {
     hMax: 400
   };
 
+  const match = {
+    x0: W * 0.14,
+    y0: H * 0.80,
+    x:  W * 0.14,
+    y:  H * 0.80,
+    w:  120,
+    h:  16,
+    tipR: 9,
+    dragging: false,
+    grabDx: 0,
+    grabDy: 0
+  };
+
   function drawBackground() {
     p.background(248);
 
@@ -180,6 +193,25 @@ registerSketch('sk4', function (p) {
     }
   }
 
+  function drawMatch() {
+    const stickCol = p.color(190, 150, 110);
+    const tipCol = p.color(180, 70, 60);
+
+    p.push();
+    p.translate(match.x, match.y);
+
+    p.noStroke();
+    p.fill(stickCol);
+    p.rectMode(p.CORNER);
+    p.rect(0, -match.h / 2, match.w, match.h, 6);
+
+    p.fill(tipCol);
+    p.circle(match.w, 0, match.tipR * 2);
+
+    p.pop();
+  }
+
+
   //flame particles - testing
   const MAX_SPARKS = 160;
   let sparks = [];
@@ -212,5 +244,6 @@ registerSketch('sk4', function (p) {
     const c = drawCandle(nowMs);
     updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
 
+    drawMatch();
   };
 });
