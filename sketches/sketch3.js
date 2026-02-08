@@ -53,6 +53,48 @@ registerSketch('sk3', function (p) {
     );
   }
 
+  function drawLogs(t) {
+    const y = rowY();
+    const logW = 18;
+    const logH = 140;
+
+    const currentIdx = t.h12 - 1;
+    const visibleHCurrent = logH * (1 - t.m / 60);
+
+    p.push();
+    p.rectMode(p.CENTER);
+    p.noStroke();
+
+    for (let i = 0; i < LOGS; i++) {
+      const x = logX(i);
+      const topY = y - logH / 2;
+
+      if (i < currentIdx) {
+        // fully submerged (just a hint)
+        p.fill(120);
+        p.circle(x, topY + 10, 8);
+
+      } else if (i === currentIdx) {
+        // partially submerged
+        if (visibleHCurrent <= 8) {
+          p.fill(120);
+          p.circle(x, topY + 10, 8);
+        } else {
+          const centerY = topY + visibleHCurrent / 2;
+          p.fill(160);
+          p.rect(x, centerY, logW, visibleHCurrent, 6);
+        }
+
+      } else {
+        // future logs
+        p.fill(180);
+        p.rect(x, y, logW, logH, 6);
+      }
+    }
+
+    p.pop();
+  }
+
 
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
@@ -63,6 +105,7 @@ registerSketch('sk3', function (p) {
     const t = getTimeParts();
 
     drawBackground();
+    drawLogs(t);
   };
 
   p.windowResized = function () { p.resizeCanvas(p.windowWidth, p.windowHeight); };
