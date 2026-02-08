@@ -28,6 +28,29 @@ registerSketch('sk4', function (p) {
     p.rect(0, candle.baseY + 30, W, H - (candle.baseY + 30));
   }
 
+  function drawHolder() {
+    const plateW = 160;
+    const plateH = 18;
+
+    const cupW = 120;
+    const cupH = 22;
+
+    p.push();
+    p.noStroke();
+
+    p.fill(210);
+    p.rectMode(p.CENTER);
+    p.rect(candle.x, candle.baseY + 22, plateW, plateH, 12);
+
+    p.fill(200);
+    p.rect(candle.x, candle.baseY + 10, cupW, cupH, 10);
+
+    p.fill(185);
+    p.rect(candle.x, candle.baseY + 12, cupW * 0.82, cupH * 0.55, 10);
+
+    p.pop();
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
@@ -35,6 +58,7 @@ registerSketch('sk4', function (p) {
 
   p.draw = function () {
     drawBackground();
+    drawHolder();
 
   };
 
