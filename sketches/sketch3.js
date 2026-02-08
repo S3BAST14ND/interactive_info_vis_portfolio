@@ -70,12 +70,12 @@ registerSketch('sk3', function (p) {
       const topY = y - logH / 2;
 
       if (i < currentIdx) {
-        // fully submerged (just a hint)
+        //fully submerged
         p.fill(120);
         p.circle(x, topY + 10, 8);
 
       } else if (i === currentIdx) {
-        // partially submerged
+        //partially submerged
         if (visibleHCurrent <= 8) {
           p.fill(120);
           p.circle(x, topY + 10, 8);
@@ -86,13 +86,24 @@ registerSketch('sk3', function (p) {
         }
 
       } else {
-        // future logs
+        //future logs
         p.fill(180);
         p.rect(x, y, logW, logH, 6);
       }
     }
-
     p.pop();
+  }
+
+  function makeShorelineXAtY(t) {
+    const currentIdx = t.h12 - 1;
+    const xTouch = logX(currentIdx);
+    const yTouch = rowY();
+
+    const slope = 0.22;
+
+    return function (y) {
+      return xTouch + slope * (y - yTouch);
+    };
   }
 
 
