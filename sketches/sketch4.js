@@ -366,15 +366,15 @@ registerSketch('sk4', function (p) {
     setDurationFromInput();
   }
 
-  //testing (kept for now)
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
-
-    durationMs = 30 * 1000;
-    startMs = p.millis();
-    running = true;
-    lit = true;
+    ensureUI();
+  
+    // start unlit
+    running = false;
+    lit = false;
+    startMs = null;
   };
 
   p.draw = function () {
