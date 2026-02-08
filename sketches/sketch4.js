@@ -284,6 +284,25 @@ registerSketch('sk4', function (p) {
       }
     };
 
+    p.mouseReleased = function () {
+      if (match.dragging) {
+        match.dragging = false;
+        match.x = match.x0;
+        match.y = match.y0;
+      }
+      if (snuffer.dragging) {
+        snuffer.dragging = false;
+        snuffer.x = snuffer.x0;
+        snuffer.y = snuffer.y0;
+      }
+    };
+  
+    p.setup = function () {
+      p.createCanvas(W, H);
+      p.textFont("system-ui");
+      ensureUI();
+    };
+
     {
       const left = snuffer.x - snuffer.w / 2 - snuffer.handleL;
       const right = snuffer.x + snuffer.w / 2;
