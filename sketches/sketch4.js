@@ -224,6 +224,32 @@ registerSketch('sk4', function (p) {
     p.pop();
   }
 
+  function matchTipPos() {
+    return { x: match.x + match.w, y: match.y };
+  }
+
+  function drawSnuffer() {
+    p.push();
+    p.translate(snuffer.x, snuffer.y);
+
+    // handle
+    p.stroke(80);
+    p.strokeWeight(6);
+    p.line(-snuffer.handleL, -snuffer.h * 0.2, -snuffer.w * 0.15, -snuffer.h * 0.2);
+    p.noStroke();
+
+    // cap
+    p.fill(120);
+    p.rectMode(p.CENTER);
+    p.rect(0, 0, snuffer.w, snuffer.h, 10);
+
+    // opening
+    p.fill(95);
+    p.rect(0, snuffer.h * 0.18, snuffer.w * 0.8, snuffer.h * 0.45, 10);
+
+    p.pop();
+  }
+
   function drawSnuffer() {
     p.push();
     p.translate(snuffer.x, snuffer.y);
