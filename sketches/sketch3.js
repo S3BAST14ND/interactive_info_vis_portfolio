@@ -22,13 +22,29 @@ registerSketch('sk3', function (p) {
     return { rawH, h12, m, s };
   }
 
+  function drawBackground() {
+    p.background(245);
+
+    p.push();
+    p.noStroke();
+    p.fill(238, 228, 205);
+    p.rect(
+      plotLeft(),
+      plotTop(),
+      plotRight() - plotLeft(),
+      plotBottom() - plotTop(),
+      18
+    );
+    p.pop();
+  }
+
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
   };
 
 
   p.draw = function () {
-    
+    drawBackground();
   };
 
   p.windowResized = function () { p.resizeCanvas(p.windowWidth, p.windowHeight); };
