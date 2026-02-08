@@ -89,7 +89,7 @@ registerSketch('sk3', function (p) {
         }
 
       } else {
-        //future logs: fully visible
+        //future logs
         p.fill(dryLogCol);
         p.rect(x, y, logW, logH, 6);
       }
@@ -100,21 +100,25 @@ registerSketch('sk3', function (p) {
 
 
   function makeShorelineXAtY(t) {
-    const currentIdx = t.h12 - 1;
-    const xTouch = logX(currentIdx);
+    const xTouch = logX(t.h12 - 1);
     const yTouch = rowY();
 
     const slope = 0.22;
+    const amp = 10;
+    const wavelength = 80;
 
     return function (y) {
-      return xTouch + slope * (y - yTouch);
+      return (
+        xTouch +
+        slope * (y - yTouch) +
+        amp * p.sin((y / wavelength) * p.TWO_PI)
+      );
     };
   }
 
   function drawTide(shorelineXAtY) {
-    p.push();
     p.noStroke();
-    p.fill(200);
+    p.fill(120, 170, 210);
 
     p.beginShape();
     p.vertex(plotLeft(), plotTop());
@@ -125,10 +129,7 @@ registerSketch('sk3', function (p) {
     }
 
     p.endShape(p.CLOSE);
-    p.pop();
   }
-
-
 
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
