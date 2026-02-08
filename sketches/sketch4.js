@@ -20,14 +20,22 @@ registerSketch('sk4', function (p) {
     hMax: 400
   };
 
+  function drawBackground() {
+    p.background(248);
+
+    p.noStroke();
+    p.fill(235);
+    p.rect(0, candle.baseY + 30, W, H - (candle.baseY + 30));
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
-    ensureUI();
   };
 
   p.draw = function () {
-    
+    drawBackground();
+
   };
 
 });
