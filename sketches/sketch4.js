@@ -441,7 +441,11 @@ registerSketch('sk4', function (p) {
     tryLightIfTouchingWick(c.wickTopX, c.wickTopY);
   }
 
-updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
+  if (snuffer.dragging && (lit || running)) {
+    tryExtinguishIfOverWick(c.wickTopX, c.wickTopY);
+  }
+
+  updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
   
     drawMatch();
     drawSnuffer();
