@@ -137,8 +137,6 @@ registerSketch('sk4', function (p) {
   function spawnSparks(wickX, wickY) {
     if (!lit || !running) return;
 
-    // spawn rate tied to mouse-free time, not seconds display
-    // keep it light but lively
     const spawnCount = 2 + Math.floor(p.random(0, 2)); // 2–3
     for (let i = 0; i < spawnCount; i++) {
       if (sparks.length >= MAX_SPARKS) sparks.shift();
@@ -159,12 +157,10 @@ registerSketch('sk4', function (p) {
     const rem = remainingMs(nowMs);
     if (!lit || !running || durationMs <= 0 || rem <= 0 || candleH <= 12) return;
 
-    // flame glow "breathes" using noise
     const t = nowMs * 0.001;
     const glow = 0.6 + 0.6 * p.noise(t * 1.7, 50);
     const glowR = 34 + 26 * glow;
 
-    // soft glow halo
     p.push();
     p.noStroke();
     p.fill(255, 190, 90, 35);
@@ -173,18 +169,15 @@ registerSketch('sk4', function (p) {
     p.fill(255, 220, 140, 55);
     p.circle(wickX, wickY - 10, glowR * 1.25);
 
-    // small bright core (not a teardrop)
     p.fill(255, 245, 200, 210);
     p.circle(wickX + p.random(-0.8, 0.8), wickY - 12 + p.random(-0.8, 0.8), 10 + 6 * glow);
     p.pop();
 
-    // spawn + draw sparks
     spawnSparks(wickX, wickY);
 
     for (let i = sparks.length - 1; i >= 0; i--) {
       const sp = sparks[i];
 
-      // turbulence
       const n = p.noise(sp.t + nowMs * 0.0007);
       sp.vx += (n - 0.5) * 0.05;
 
@@ -232,18 +225,15 @@ registerSketch('sk4', function (p) {
     p.push();
     p.translate(snuffer.x, snuffer.y);
 
-    // handle
     p.stroke(80);
     p.strokeWeight(6);
     p.line(-snuffer.handleL, -snuffer.h * 0.2, -snuffer.w * 0.15, -snuffer.h * 0.2);
     p.noStroke();
 
-    // cap
     p.fill(120);
     p.rectMode(p.CENTER);
     p.rect(0, 0, snuffer.w, snuffer.h, 10);
 
-    // opening
     p.fill(95);
     p.rect(0, snuffer.h * 0.18, snuffer.w * 0.8, snuffer.h * 0.45, 10);
 
@@ -258,9 +248,48 @@ registerSketch('sk4', function (p) {
     return !(p.mouseX < 0 || p.mouseX > W || p.mouseY < 0 || p.mouseY > H);
   }
 
+  // NEW: Top-level HUD (was incorrectly nested)
+  function drawHUD() {
+    p.push();
+    p.noStroke();
+    p.fill(60);
+    p.textAlign(p.LEFT, p.TOP);
+    p.textSize(13);
+    p.text(statusText, 20, 18);
+    p.text("Minutes input is below the canvas. Max = 60.", 20, 38);
+    p.pop();
+  }
+
+  // NEW: Top-level drag + release (were incorrectly nested)
+  p.mouseDragged = function () {
+    if (match.dragging) {
+      match.x = clamp(p.mouseX + match.grabDx, 10, W - match.w - 10);
+      match.y = clamp(p.mouseY + match.grabDy, 20, H - 20);
+    }
+
+    if (snuffer.dragging) {
+      snuffer.x = clamp(p.mouseX + snuffer.grabDx, 40, W - 40);
+      snuffer.y = clamp(p.mouseY + snuffer.grabDy, 40, H - 40);
+    }
+  };
+
+  p.mouseReleased = function () {
+    if (match.dragging) {
+      match.dragging = false;
+      match.x = match.x0;
+      match.y = match.y0;
+    }
+    if (snuffer.dragging) {
+      snuffer.dragging = false;
+      snuffer.x = snuffer.x0;
+      snuffer.y = snuffer.y0;
+    }
+  };
+
   p.mousePressed = function () {
     if (!mouseInCanvas()) return;
 
+    // match hit test
     {
       const withinX = (p.mouseX >= match.x) && (p.mouseX <= match.x + match.w);
       const withinY = (p.mouseY >= match.y - match.h) && (p.mouseY <= match.y + match.h);
@@ -272,48 +301,7 @@ registerSketch('sk4', function (p) {
       }
     }
 
-    p.mouseDragged = function () {
-      if (match.dragging) {
-        match.x = clamp(p.mouseX + match.grabDx, 10, W - match.w - 10);
-        match.y = clamp(p.mouseY + match.grabDy, 20, H - 20);
-      }
-  
-      if (snuffer.dragging) {
-        snuffer.x = clamp(p.mouseX + snuffer.grabDx, 40, W - 40);
-        snuffer.y = clamp(p.mouseY + snuffer.grabDy, 40, H - 40);
-      }
-    };
-
-    p.mouseReleased = function () {
-      if (match.dragging) {
-        match.dragging = false;
-        match.x = match.x0;
-        match.y = match.y0;
-      }
-      if (snuffer.dragging) {
-        snuffer.dragging = false;
-        snuffer.x = snuffer.x0;
-        snuffer.y = snuffer.y0;
-      }
-    };
-
-    function drawHUD() {
-      p.push();
-      p.noStroke();
-      p.fill(60);
-      p.textAlign(p.LEFT, p.TOP);
-      p.textSize(13);
-      p.text(statusText, 20, 18);
-      p.text("Minutes input is below the canvas. Max = 60.", 20, 38);
-      p.pop();
-    }
-  
-    p.setup = function () {
-      p.createCanvas(W, H);
-      p.textFont("system-ui");
-      ensureUI();
-    };
-
+    // snuffer hit test
     {
       const left = snuffer.x - snuffer.w / 2 - snuffer.handleL;
       const right = snuffer.x + snuffer.w / 2;
@@ -341,11 +329,11 @@ registerSketch('sk4', function (p) {
     return Math.max(0, durationMs - (nowMs - startMs));
   }
 
-  //testing
+  //testing (kept for now)
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
-  
+
     durationMs = 30 * 1000;
     startMs = p.millis();
     running = true;
@@ -357,7 +345,7 @@ registerSketch('sk4', function (p) {
 
     drawBackground();
     drawHolder();
-    
+
     const c = drawCandle(nowMs);
     updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
 
