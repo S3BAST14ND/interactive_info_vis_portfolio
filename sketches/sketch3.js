@@ -178,24 +178,72 @@ registerSketch('sk3', function (p) {
   }
 
   function drawSunMoon(t) {
-    const x = plotRight() - 28;
+    const isPM = t.rawH >= 12;
+
+    const x = isPM ? (plotLeft() + 28) : (plotRight() - 28);
     const y = plotTop() + 28;
   
-    p.push();
-    p.noStroke();
+    const isDay = (t.rawH >= 7 && t.rawH < 19);
   
-    if (t.rawH < 12) {
-      p.fill(255, 180, 60);
-      p.circle(x, y, 22);
+    if (isDay) {
+      p.push();
+      p.noStroke();
+  
+      // soft halo
+      p.fill(255, 210, 90, 55);
+      p.circle(x, y, 44);
+      p.fill(255, 210, 90, 35);
+      p.circle(x, y, 58);
+  
+      // sun disk (slight highlight)
+      p.fill(255, 196, 70, 235);
+      p.circle(x, y, 26);
+      p.fill(255, 235, 170, 130);
+      p.circle(x - 4, y - 4, 14);
+  
+      // nicer rays (alternating lengths)
+      p.stroke(255, 190, 60, 210);
+      p.strokeWeight(2);
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * p.TWO_PI;
+        const r1 = 18;
+        const r2 = (i % 2 === 0) ? 30 : 25;
+        p.line(
+          x + r1 * p.cos(a),
+          y + r1 * p.sin(a),
+          x + r2 * p.cos(a),
+          y + r2 * p.sin(a)
+        );
+      }
+  
+      p.pop();
     } else {
-      p.fill(200, 215, 235);
-      p.circle(x, y, 22);
+      p.push();
+      p.noStroke();
   
-      p.fill(238, 228, 205);
-      p.circle(x + 6, y - 2, 18);
+      // moon glow
+      p.fill(210, 225, 255, 50);
+      p.circle(x, y, 52);
+      p.fill(210, 225, 255, 30);
+      p.circle(x, y, 64);
+  
+      // moon body
+      p.fill(230, 235, 245, 230);
+      p.circle(x, y, 24);
+  
+      // crescent carve (use your background fill color)
+      p.fill(245);
+      p.circle(x + 7, y - 2, 22);
+  
+      // a couple stars (tiny + subtle twinkle)
+      const tw = 0.5 + 0.5 * p.sin(p.millis() * 0.001 * 1.2);
+      p.fill(240, 245, 255, 170);
+      p.circle(x - 22, y + 10, 2.0 + tw);
+      p.circle(x + 18, y + 14, 1.6 + 0.7 * tw);
+      p.circle(x - 12, y - 16, 1.4 + 0.5 * tw);
+  
+      p.pop();
     }
-  
-    p.pop();
   }
 
   function birdPoleIndex(t) {
