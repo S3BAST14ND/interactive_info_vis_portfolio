@@ -108,6 +108,27 @@ registerSketch('sk4', function (p) {
     return { topY, h, wickTopX, wickTopY };
   }
 
+  function spawnSparks(wickX, wickY) {
+    if (!lit || !running) return;
+
+    // spawn rate tied to mouse-free time, not seconds display
+    // keep it light but lively
+    const spawnCount = 2 + Math.floor(p.random(0, 2)); // 2–3
+    for (let i = 0; i < spawnCount; i++) {
+      if (sparks.length >= MAX_SPARKS) sparks.shift();
+
+      sparks.push({
+        x: wickX + p.random(-4, 4),
+        y: wickY - 8 + p.random(-2, 2),
+        vx: p.random(-0.35, 0.35),
+        vy: p.random(-1.3, -0.5),
+        r: p.random(2.0, 5.0),
+        life: p.random(22, 45),
+        t: p.random(0, 9999)
+      });
+    }
+  }
+
   //testing
   p.setup = function () {
     p.createCanvas(W, H);
