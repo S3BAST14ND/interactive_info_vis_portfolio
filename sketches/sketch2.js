@@ -122,8 +122,12 @@ registerSketch('sk2', function (p) {
   function drawGraphEncoding(t) {
     const { rawH, h12, m } = t;
 
-    const lineCol = rawH >= 12 ? p.color(30) : p.color(20, 130, 70);
-    const fillCol = p.color(220, 90, 90, 70);
+    const lineCol = p.color(30)
+
+    const fillCol =
+      rawH < 12
+        ? p.color(220, 90, 90, 70)
+        : p.color(90, 140, 220, 70);
 
     const x0 = xFromMinute(0);
     const y0 = yFromHour(h12);
@@ -131,7 +135,6 @@ registerSketch('sk2', function (p) {
     const x1 = xFromMinute(m);
     const y1 = yFromHour(0);
 
-    // shaded triangular area
     p.push();
     p.noStroke();
     p.fill(fillCol);
@@ -142,7 +145,6 @@ registerSketch('sk2', function (p) {
     p.endShape(p.CLOSE);
     p.pop();
 
-    // main line
     p.push();
     p.stroke(lineCol);
     p.strokeWeight(4);
