@@ -336,6 +336,18 @@ registerSketch('sk4', function (p) {
     return clamp(m, 0.1, 60);
   }
 
+  function setDurationFromInput() {
+    const m = readMinutes();
+    if (m === null || m <= 0) {
+      durationMs = 0;
+      if (!running) statusText = "Enter minutes between 0.1 and 60.";
+      return false;
+    }
+    durationMs = Math.round(m * 60 * 1000);
+    if (!running) statusText = "Drag match to wick to light. Drag snuffer to extinguish.";
+    return true;
+  }
+
   //testing (kept for now)
   p.setup = function () {
     p.createCanvas(W, H);
