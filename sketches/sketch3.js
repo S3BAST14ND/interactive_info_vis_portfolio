@@ -118,7 +118,7 @@ registerSketch('sk3', function (p) {
     };
   }
 
-  function drawTide(shorelineXAtY) {
+  function drawTide(shorelineXAtY, nowSec) {
     p.noStroke();
     p.fill(120, 170, 210);
 
@@ -131,6 +131,43 @@ registerSketch('sk3', function (p) {
     }
 
     p.endShape(p.CLOSE);
+    drawOceanTexture(shorelineXAtY, nowSec);
+
+  }
+
+  function drawOceanTexture(shorelineXAtY, nowSec) {
+    p.push();
+    p.noFill();
+    p.stroke(255, 255, 255, 28);
+    p.strokeWeight(1);
+  
+    const stepY = 14;
+    for (let y = plotTop() + 6; y <= plotBottom() - 6; y += stepY) {
+      const edgeX = shorelineXAtY(y);
+      const x0 = plotLeft() + 6;
+      const x1 = edgeX - 6;
+      if (x1 <= x0) continue;
+  
+      const wobble = 6 * p.sin(nowSec * 1.8 + y * 0.08);
+      const seg = 28;
+  
+      for (let x = x0; x <= x1; x += seg) {
+        const len = Math.min(seg - 6, x1 - x);
+        const yOff = wobble + 2 * p.sin(nowSec * 2.2 + x * 0.06);
+        p.line(x, y + yOff, x + len, y + yOff);
+      }
+    }
+  
+    p.noStroke();
+    p.fill(255, 255, 255, 18);
+    for (let i = 0; i < 120; i++) {
+      const y = p.random(plotTop(), plotBottom());
+      const edgeX = shorelineXAtY(y);
+      const x = p.random(plotLeft(), edgeX);
+      p.circle(x, y, p.random(1, 2.4));
+    }
+  
+    p.pop();
   }
 
   function drawSunMoon(t) {
