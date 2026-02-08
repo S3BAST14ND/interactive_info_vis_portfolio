@@ -11,6 +11,11 @@ registerSketch('sk3', function (p) {
   function plotTop() { return margin.top; }
   function plotBottom() { return H - margin.bottom; }
 
+  function rowY() {
+    return plotTop() + (plotBottom() - plotTop()) * 0.55;
+  }
+
+
   function getTimeParts() {
     const rawH = p.hour();
     const m = p.minute();
