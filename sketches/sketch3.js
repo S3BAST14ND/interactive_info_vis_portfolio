@@ -189,19 +189,16 @@ registerSketch('sk3', function (p) {
       p.push();
       p.noStroke();
   
-      // soft halo
       p.fill(255, 210, 90, 55);
       p.circle(x, y, 44);
       p.fill(255, 210, 90, 35);
       p.circle(x, y, 58);
   
-      // sun disk (slight highlight)
       p.fill(255, 196, 70, 235);
       p.circle(x, y, 26);
       p.fill(255, 235, 170, 130);
       p.circle(x - 4, y - 4, 14);
   
-      // nicer rays (alternating lengths)
       p.stroke(255, 190, 60, 210);
       p.strokeWeight(2);
       for (let i = 0; i < 12; i++) {
@@ -221,21 +218,17 @@ registerSketch('sk3', function (p) {
       p.push();
       p.noStroke();
   
-      // moon glow
       p.fill(210, 225, 255, 50);
       p.circle(x, y, 52);
       p.fill(210, 225, 255, 30);
       p.circle(x, y, 64);
   
-      // moon body
       p.fill(230, 235, 245, 230);
       p.circle(x, y, 24);
   
-      // crescent carve (use your background fill color)
       p.fill(245);
       p.circle(x + 7, y - 2, 22);
   
-      // a couple stars (tiny + subtle twinkle)
       const tw = 0.5 + 0.5 * p.sin(p.millis() * 0.001 * 1.2);
       p.fill(240, 245, 255, 170);
       p.circle(x - 22, y + 10, 2.0 + tw);
