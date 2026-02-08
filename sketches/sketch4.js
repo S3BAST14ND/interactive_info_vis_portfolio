@@ -401,7 +401,12 @@ registerSketch('sk4', function (p) {
     drawHolder();
   
     const c = drawCandle(nowMs);
-    updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
+
+  if (match.dragging && !lit) {
+    tryLightIfTouchingWick(c.wickTopX, c.wickTopY);
+  }
+
+updateAndDrawFlame(nowMs, c.wickTopX, c.wickTopY, c.h);
   
     drawMatch();
     drawSnuffer();
