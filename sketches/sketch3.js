@@ -4,7 +4,7 @@ registerSketch('sk3', function (p) {
   const W = 800;
   const H = 600;
 
-  const margin = { left: 60, right: 60, top: 60, bottom: 80 };
+  const margin = { left: 90, right: 40, top: 50, bottom: 90 };
 
   function plotLeft() { return margin.left; }
   function plotRight() { return W - margin.right; }
@@ -132,7 +132,8 @@ registerSketch('sk3', function (p) {
   }
 
   p.setup = function () {
-    p.createCanvas(p.windowWidth, p.windowHeight);
+    p.createCanvas(W, H);
+    p.textFont('system-ui');
   };
 
 
