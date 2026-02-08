@@ -382,6 +382,16 @@ registerSketch('sk4', function (p) {
     if (d <= 18) lightCandle();
   }
 
+  function snapToolsHome() {
+    match.x = match.x0;
+    match.y = match.y0;
+    match.dragging = false;
+  
+    snuffer.x = snuffer.x0;
+    snuffer.y = snuffer.y0;
+    snuffer.dragging = false;
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
