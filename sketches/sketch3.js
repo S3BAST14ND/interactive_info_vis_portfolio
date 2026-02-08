@@ -144,14 +144,13 @@ registerSketch('sk3', function (p) {
   function drawOceanTexture(shorelineXAtY) {
     p.push();
   
-    // calm, static contour lines
     p.noFill();
-    p.stroke(255, 255, 255, 90); // much whiter, still soft
+    p.stroke(255, 255, 255, 90);
     p.strokeWeight(1.2);
   
-    const lines = 7;        // fewer = calmer
-    const spacing = 18;     // distance between contours
-    const stepY = 12;       // smoothness
+    const lines = 7;
+    const spacing = 18;
+    const stepY = 12;
   
     for (let k = 1; k <= lines; k++) {
       const offset = k * spacing;
@@ -160,14 +159,12 @@ registerSketch('sk3', function (p) {
       for (let y = plotBottom(); y >= plotTop(); y -= stepY) {
         const edgeX = shorelineXAtY(y);
   
-        // SAME wave shape, just shifted inward
         const x = edgeX - offset;
         p.vertex(x, y);
       }
       p.endShape();
     }
   
-    // very subtle grain (optional but calming)
     p.noStroke();
     p.fill(255, 255, 255, 12);
     for (let i = 0; i < 80; i++) {
@@ -215,31 +212,24 @@ registerSketch('sk3', function (p) {
     const logH = 140;
     const topY = y - logH / 2;
   
-    // perch just above the log tops
     const perchY = topY - 8;
   
-    // subtle wing wiggle (soothing)
     const wing = 1.8 * p.sin((t.s / 60) * p.TWO_PI);
   
     p.push();
-  
-    // body + head
-    p.noStroke();
+      p.noStroke();
     p.fill(35, 35, 35, 220);
     p.ellipse(x, perchY, 14, 10);
     p.circle(x + 7, perchY - 3, 7);
   
-    // beak
     p.fill(230, 170, 70, 220);
     p.triangle(x + 10, perchY - 3, x + 16, perchY - 1, x + 10, perchY + 1);
   
-    // wing stroke
     p.noFill();
     p.stroke(35, 35, 35, 190);
     p.strokeWeight(2);
     p.arc(x - 2, perchY + 1, 16, 10 + wing, p.PI + 0.4, p.TWO_PI - 0.4);
   
-    // legs
     p.stroke(35, 35, 35, 200);
     p.strokeWeight(1.8);
     p.line(x + 2, perchY + 5, x + 1, perchY + 10);
