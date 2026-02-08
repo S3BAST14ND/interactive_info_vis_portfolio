@@ -373,6 +373,10 @@ registerSketch('sk4', function (p) {
     running = true;
     startMs = p.millis();
     statusText = "Burning… Drag snuffer to extinguish.";
+
+    match.dragging = false;
+    match.x = match.x0;
+    match.y = match.y0;
   }
   
   function tryLightIfTouchingWick(wickTopX, wickTopY) {
