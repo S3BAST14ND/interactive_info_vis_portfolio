@@ -55,3 +55,9 @@ canvas {
   height: auto;
   display: block;
 }
+
+.sketch-image {
+  max-width: 450px;
+  width: 100%;
+  height: auto;
+}

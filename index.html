@@ -45,35 +45,56 @@
       <div id="sketch-drawing-sk2" class="sketch-evolution">
         <!-- Project narrative template: replace the text below with your own narrative -->
         <div class="sketch-narrative" aria-labelledby="sk2-narrative-title">
-          <h3 id="sk2-narrative-title">Sketch narrative (replace this and add to the other two sketches!)</h3>
+          <h3 id="sk2-narrative-title">Sketch narrative</h3>
           <p class="small-note">Replace this entire block with your own text when submitting.</p>
           <p>
-            Context: Briefly describe the situation or user need this sketch addresses. For example,
-            "This sketch visualizes sunrise/sunset behavior for a simple teaching demo on coordinate
-            systems and interaction." Keep it short — 1–2 sentences.
+            This sketch visualizes the current time as a graph, with minutes on the x-axis and hours on the y-axis, enabling quick at-a-glance recognition through spatial understanding similar to how an analog clock is read. It is intended for focused contexts such as studying or analytical work, where users benefit from perceiving time relationships visually rather than reading precise numeric values.
           <ul>
-            <li><strong>Context:</strong> Who is this for? In what context will it be used? (e.g., mountain, pomodoro,
-              running, cooking, breathing?)</li>
-            <li><strong>Design decisions:</strong> Explain 2–3 key choices you made (layout, color, interaction) and why
-              you made them. Use plain language and reference any constraints (time, accessibility,
-              or target device).</li>
-            <li><strong>Future work:</strong> 1–2 ideas for improvements or extensions.</li>
+            <li><strong>Context:</strong> This is for use in an environment where tasks take place throughout the day, such as a kitchen, office, classroom, etc. Because of the length of tasks undertaken in this space, it is useful to have an at-a-glance representation the current time.</li>
+            <strong>Design decisions:</strong>
+      <ul>
+        <li>
+          <strong>Graph-based encoding:</strong>
+          Minutes and hours are mapped to Cartesian axes to represent time as a spatial relationship instead of a circular cycle. This preserves the intuitive spatial reasoning users apply to analog clocks while being easier to read from a distance or at a glance.
+        </li>
+        <li>
+          <strong>Line and area representation:</strong>
+          A line connects the current hour and minute, while the area beneath it represents the accumulation of time within the hour. This reinforces the idea of time being gradually consumed rather than instantaneously updated such as a digital clock may seem. This design does not directly rely on interpreting colors.
+        </li>
+        <li>
+          <strong>Complex to Display:</strong>
+          The target device of this representation is a screen or display of some kind, as one drawback is the density of pixels needed and the ability to display small details, as well as large changes not as suitable to a display with limited outputs
+        </li>
+      </ul>
+    </li>
+            <li><strong>Future work:</strong> Future iterations could focus on user interaction such as allowing users to scrub through time, set timers or alarms and represent them on the graph, or changes to the time scales to represent days or months if selected. Another focus area could be finding a way for the time representation to look complete at the end of the day, as a graph will always look "half-full"</li>
           </ul>
           </p>
         </div>
 
         <h3>Sketch evolution</h3>
-        <p class="small-note">Replace <b>these images</b> with your own sketch evolution images.</p>
         <figure>
-          <!-- <img src="images/sk2-evolution-1.png" alt="Sketch #A - step 1" /> -->
+          <img
+            class="sketch-image"
+            src="images/time_graph_original_sketch.jpg"
+            alt="Sketch #A - step 1"
+          />
           <figcaption>Step 1 — initial layout and annotated design decisions</figcaption>
         </figure>
         <figure>
-          <!-- <img src="images/sk2-evolution-2.png" alt="Sketch #A - step 2" /> -->
+          <img
+            class="sketch-image"
+            src="images/time_graph_feedback_sketch.jpg"
+            alt="Sketch #A - step 2"
+          />
           <figcaption>Step 2 — second layout after peer feedback</figcaption>
         </figure>
         <figure>
-          <!-- <img src="images/sk2-evolution-3.png" alt="Sketch #A - step 3" /> -->
+          <img
+            class="sketch-image"
+            src="images/time_graph_annotated_final.jpg"
+            alt="Sketch #A - step 3"
+          />
           <figcaption>Step 3 — refined visuals and annotations</figcaption>
         </figure>
       </div>
