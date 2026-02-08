@@ -105,19 +105,21 @@ registerSketch('sk3', function (p) {
     const slope = 0.22;
     const wavelength = 80;
   
-    // NEW: tide “breathing” in/out (slow)
-    const tide = 0.5 + 0.5 * p.sin(nowSec * 0.35);   // 0..1, slow
-    const amp = 6 + 10 * tide;                       // 6..16 (in/out)
+    const tide = 0.5 + 0.5 * p.sin(nowSec * 0.35);
+    const amp = 6 + 10 * tide;
+  
+    const push = 8 * p.sin(nowSec * 0.35);
   
     return function (y) {
       return (
         xTouch +
+        push +
         slope * (y - yTouch) +
         amp * p.sin((y / wavelength) * p.TWO_PI)
       );
     };
   }
-  
+
   function drawTide(shorelineXAtY) {
     p.noStroke();
     p.fill(120, 170, 210);
