@@ -103,22 +103,22 @@ registerSketch('sk3', function (p) {
     const yTouch = rowY();
   
     const slope = 0.22;
-  
-    const amp = 10;
     const wavelength = 80;
   
-    const phase = nowSec * 1.6;
+    // NEW: tide “breathing” in/out (slow)
+    const tide = 0.5 + 0.5 * p.sin(nowSec * 0.35);   // 0..1, slow
+    const amp = 6 + 10 * tide;                       // 6..16 (in/out)
   
     return function (y) {
       return (
         xTouch +
         slope * (y - yTouch) +
-        amp * p.sin((y / wavelength) * p.TWO_PI + phase)
+        amp * p.sin((y / wavelength) * p.TWO_PI)
       );
     };
   }
-
-  function drawTide(shorelineXAtY, nowSec) {
+  
+  function drawTide(shorelineXAtY) {
     p.noStroke();
     p.fill(120, 170, 210);
 
@@ -131,40 +131,44 @@ registerSketch('sk3', function (p) {
     }
 
     p.endShape(p.CLOSE);
-    drawOceanTexture(shorelineXAtY, nowSec);
+    drawOceanTexture(shorelineXAtY);
 
   }
 
-  function drawOceanTexture(shorelineXAtY, nowSec) {
+  function drawOceanTexture(shorelineXAtY) {
     p.push();
+  
+    // calm, static contour lines
     p.noFill();
-    p.stroke(255, 255, 255, 28);
-    p.strokeWeight(1);
+    p.stroke(255, 255, 255, 90); // much whiter, still soft
+    p.strokeWeight(1.2);
   
-    const stepY = 14;
-    for (let y = plotTop() + 6; y <= plotBottom() - 6; y += stepY) {
-      const edgeX = shorelineXAtY(y);
-      const x0 = plotLeft() + 6;
-      const x1 = edgeX - 6;
-      if (x1 <= x0) continue;
+    const lines = 7;        // fewer = calmer
+    const spacing = 18;     // distance between contours
+    const stepY = 12;       // smoothness
   
-      const wobble = 6 * p.sin(nowSec * 1.8 + y * 0.08);
-      const seg = 28;
+    for (let k = 1; k <= lines; k++) {
+      const offset = k * spacing;
   
-      for (let x = x0; x <= x1; x += seg) {
-        const len = Math.min(seg - 6, x1 - x);
-        const yOff = wobble + 2 * p.sin(nowSec * 2.2 + x * 0.06);
-        p.line(x, y + yOff, x + len, y + yOff);
+      p.beginShape();
+      for (let y = plotBottom(); y >= plotTop(); y -= stepY) {
+        const edgeX = shorelineXAtY(y);
+  
+        // SAME wave shape, just shifted inward
+        const x = edgeX - offset;
+        p.vertex(x, y);
       }
+      p.endShape();
     }
   
+    // very subtle grain (optional but calming)
     p.noStroke();
-    p.fill(255, 255, 255, 18);
-    for (let i = 0; i < 120; i++) {
+    p.fill(255, 255, 255, 12);
+    for (let i = 0; i < 80; i++) {
       const y = p.random(plotTop(), plotBottom());
       const edgeX = shorelineXAtY(y);
       const x = p.random(plotLeft(), edgeX);
-      p.circle(x, y, p.random(1, 2.4));
+      p.circle(x, y, p.random(1, 2));
     }
   
     p.pop();
@@ -204,7 +208,7 @@ registerSketch('sk3', function (p) {
     const shorelineXAtY = makeShorelineXAtY(t, nowSec);
   
     drawBackground();
-    drawTide(shorelineXAtY, nowSec);
+    drawTide(shorelineXAtY);
     drawLogs(t);
     drawSunMoon(t);
   };
