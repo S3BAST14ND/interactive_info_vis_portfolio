@@ -51,15 +51,80 @@ registerSketch('sk4', function (p) {
     p.pop();
   }
 
+  //testing only, remove
+  function progress01(nowMs) {
+    if (!running || startMs === null || durationMs <= 0) return 0;
+    return p.constrain((nowMs - startMs) / durationMs, 0, 1);
+  }
+
+  function drawCandle(nowMs) {
+    const prog = progress01(nowMs);
+
+    const h = candle.hMax * (1 - prog);
+    const topY = candle.baseY - h;
+
+    const wax = p.color(245, 235, 210);
+    const waxEdge = p.color(0, 0, 0, 35);
+
+    p.push();
+    p.rectMode(p.CENTER);
+
+    p.noStroke();
+    p.fill(wax);
+    p.rect(candle.x, (topY + candle.baseY) / 2, candle.w, h, 18);
+
+    p.noFill();
+    p.stroke(waxEdge);
+    p.strokeWeight(2);
+    p.rect(candle.x, (topY + candle.baseY) / 2, candle.w, h, 18);
+
+    p.noStroke();
+    p.fill(235, 220, 190);
+    p.beginShape();
+    const lipW = candle.w * 0.95;
+    const lipY = topY;
+    for (let i = 0; i <= 20; i++) {
+      const x = p.lerp(candle.x - lipW / 2, candle.x + lipW / 2, i / 20);
+      const y = lipY + 6 * p.sin((i / 20) * p.TWO_PI + prog * p.TWO_PI);
+      p.vertex(x, y);
+    }
+    p.vertex(candle.x + lipW / 2, lipY + 16);
+    p.vertex(candle.x - lipW / 2, lipY + 16);
+    p.endShape(p.CLOSE);
+
+    // wick
+    let wickTopX = candle.x;
+    let wickTopY = topY - 14;
+
+    if (h > 14) {
+      p.stroke(60);
+      p.strokeWeight(4);
+      p.line(candle.x, topY + 6, candle.x, wickTopY);
+    } else {
+      wickTopY = topY - 6;
+    }
+
+    p.pop();
+    return { topY, h, wickTopX, wickTopY };
+  }
+
+  //testing
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
+  
+    durationMs = 30 * 1000;
+    startMs = p.millis();
+    running = true;
   };
 
   p.draw = function () {
+    const nowMs = p.millis();
+
     drawBackground();
     drawHolder();
+    
+    const c = drawCandle(nowMs);
 
   };
-
 });
