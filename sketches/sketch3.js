@@ -11,6 +11,17 @@ registerSketch('sk3', function (p) {
   function plotTop() { return margin.top; }
   function plotBottom() { return H - margin.bottom; }
 
+  function getTimeParts() {
+    const rawH = p.hour();
+    const m = p.minute();
+    const s = p.second();
+
+    let h12 = rawH % 12;
+    if (h12 === 0) h12 = 12;
+
+    return { rawH, h12, m, s };
+  }
+
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
   };
