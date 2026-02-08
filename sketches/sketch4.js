@@ -13,6 +13,12 @@ registerSketch('sk4', function (p) {
   let running = false;
   let lit = false;
 
+  const candle = {
+    x: W * 0.58,
+    baseY: H * 0.82,
+    w: 90,
+    hMax: 400
+  };
 
   p.setup = function () {
     p.createCanvas(W, H);
