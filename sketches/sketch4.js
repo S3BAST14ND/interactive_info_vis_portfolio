@@ -296,6 +296,17 @@ registerSketch('sk4', function (p) {
         snuffer.y = snuffer.y0;
       }
     };
+
+    function drawHUD() {
+      p.push();
+      p.noStroke();
+      p.fill(60);
+      p.textAlign(p.LEFT, p.TOP);
+      p.textSize(13);
+      p.text(statusText, 20, 18);
+      p.text("Minutes input is below the canvas. Max = 60.", 20, 38);
+      p.pop();
+    }
   
     p.setup = function () {
       p.createCanvas(W, H);
@@ -352,5 +363,6 @@ registerSketch('sk4', function (p) {
 
     drawMatch();
     drawSnuffer();
+    drawHUD();
   };
 });
