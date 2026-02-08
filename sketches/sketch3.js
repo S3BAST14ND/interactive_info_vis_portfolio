@@ -80,7 +80,7 @@ registerSketch('sk3', function (p) {
       } else if (i === currentIdx) {
         //partially submerged
         if (visibleHCurrent <= 8) {
-          p.fill(submergedCol);
+          p.fill(wetLogCol);
           p.circle(x, topY + 10, 8);
         } else {
           const centerY = topY + visibleHCurrent / 2;
@@ -97,7 +97,6 @@ registerSketch('sk3', function (p) {
 
     p.pop();
   }
-
 
   function makeShorelineXAtY(t) {
     const xTouch = logX(t.h12 - 1);
@@ -131,6 +130,27 @@ registerSketch('sk3', function (p) {
     p.endShape(p.CLOSE);
   }
 
+  function drawSunMoon(t) {
+    const x = plotRight() - 28;
+    const y = plotTop() + 28;
+  
+    p.push();
+    p.noStroke();
+  
+    if (t.rawH < 12) {
+      p.fill(255, 180, 60);
+      p.circle(x, y, 22);
+    } else {
+      p.fill(200, 215, 235);
+      p.circle(x, y, 22);
+  
+      p.fill(238, 228, 205);
+      p.circle(x + 6, y - 2, 18);
+    }
+  
+    p.pop();
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont('system-ui');
@@ -145,8 +165,8 @@ registerSketch('sk3', function (p) {
     drawBackground();
     drawTide(shorelineXAtY)
     drawLogs(t);
-  };
+    drawSunMoon(t);
 
-  p.windowResized = function () { p.resizeCanvas(p.windowWidth, p.windowHeight); };
+  };
 
 });
