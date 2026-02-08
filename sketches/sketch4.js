@@ -272,6 +272,18 @@ registerSketch('sk4', function (p) {
       }
     }
 
+    p.mouseDragged = function () {
+      if (match.dragging) {
+        match.x = clamp(p.mouseX + match.grabDx, 10, W - match.w - 10);
+        match.y = clamp(p.mouseY + match.grabDy, 20, H - 20);
+      }
+  
+      if (snuffer.dragging) {
+        snuffer.x = clamp(p.mouseX + snuffer.grabDx, 40, W - 40);
+        snuffer.y = clamp(p.mouseY + snuffer.grabDy, 40, H - 40);
+      }
+    };
+
     {
       const left = snuffer.x - snuffer.w / 2 - snuffer.handleL;
       const right = snuffer.x + snuffer.w / 2;
