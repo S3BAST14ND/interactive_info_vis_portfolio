@@ -98,19 +98,22 @@ registerSketch('sk3', function (p) {
     p.pop();
   }
 
-  function makeShorelineXAtY(t) {
+  function makeShorelineXAtY(t, nowSec) {
     const xTouch = logX(t.h12 - 1);
     const yTouch = rowY();
-
+  
     const slope = 0.22;
+  
     const amp = 10;
     const wavelength = 80;
-
+  
+    const phase = nowSec * 1.6;
+  
     return function (y) {
       return (
         xTouch +
         slope * (y - yTouch) +
-        amp * p.sin((y / wavelength) * p.TWO_PI)
+        amp * p.sin((y / wavelength) * p.TWO_PI + phase)
       );
     };
   }
@@ -159,14 +162,14 @@ registerSketch('sk3', function (p) {
 
   p.draw = function () {
     const t = getTimeParts();
-    const shorelineXAtY = makeShorelineXAtY(t);
-
-
+    const nowSec = p.millis() * 0.001;
+  
+    const shorelineXAtY = makeShorelineXAtY(t, nowSec);
+  
     drawBackground();
-    drawTide(shorelineXAtY)
+    drawTide(shorelineXAtY, nowSec);
     drawLogs(t);
     drawSunMoon(t);
-
   };
 
 });
