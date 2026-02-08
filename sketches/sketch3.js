@@ -61,6 +61,9 @@ registerSketch('sk3', function (p) {
     const currentIdx = t.h12 - 1;
     const visibleHCurrent = logH * (1 - t.m / 60);
 
+    const dryLogCol = p.color(160, 120, 80);
+    const wetLogCol = p.color(100, 65, 30);
+
     p.push();
     p.rectMode(p.CENTER);
     p.noStroke();
@@ -71,28 +74,30 @@ registerSketch('sk3', function (p) {
 
       if (i < currentIdx) {
         //fully submerged
-        p.fill(120);
+        p.fill(wetLogCol);
         p.circle(x, topY + 10, 8);
 
       } else if (i === currentIdx) {
         //partially submerged
         if (visibleHCurrent <= 8) {
-          p.fill(120);
+          p.fill(submergedCol);
           p.circle(x, topY + 10, 8);
         } else {
           const centerY = topY + visibleHCurrent / 2;
-          p.fill(160);
+          p.fill(wetLogCol);
           p.rect(x, centerY, logW, visibleHCurrent, 6);
         }
 
       } else {
-        //future logs
-        p.fill(180);
+        //future logs: fully visible
+        p.fill(dryLogCol);
         p.rect(x, y, logW, logH, 6);
       }
     }
+
     p.pop();
   }
+
 
   function makeShorelineXAtY(t) {
     const currentIdx = t.h12 - 1;
@@ -136,8 +141,8 @@ registerSketch('sk3', function (p) {
 
 
     drawBackground();
-    drawLogs(t);
     drawTide(shorelineXAtY)
+    drawLogs(t);
   };
 
   p.windowResized = function () { p.resizeCanvas(p.windowWidth, p.windowHeight); };
