@@ -392,6 +392,18 @@ registerSketch('sk4', function (p) {
     snuffer.dragging = false;
   }
 
+  function resetAll() {
+    running = false;
+    lit = false;
+    startMs = null;
+  
+    setDurationFromInput();
+    snapToolsHome();
+  
+    sparks.length = 0;
+    statusText = "Reset. Drag match to wick to light. Drag snuffer to extinguish.";
+  }
+
   p.setup = function () {
     p.createCanvas(W, H);
     p.textFont("system-ui");
