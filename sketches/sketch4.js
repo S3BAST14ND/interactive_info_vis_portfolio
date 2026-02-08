@@ -329,6 +329,13 @@ registerSketch('sk4', function (p) {
     return Math.max(0, durationMs - (nowMs - startMs));
   }
 
+  function readMinutes() {
+    const raw = minutesInput ? minutesInput.value() : "";
+    const m = parseFloat(raw);
+    if (!isFinite(m)) return null;
+    return clamp(m, 0.1, 60);
+  }
+
   //testing (kept for now)
   p.setup = function () {
     p.createCanvas(W, H);
