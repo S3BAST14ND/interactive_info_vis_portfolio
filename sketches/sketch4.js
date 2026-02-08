@@ -348,6 +348,23 @@ registerSketch('sk4', function (p) {
     return true;
   }
 
+  function ensureUI() {
+    if (minutesInput) return;
+  
+    minutesInput = p.createInput("10", "number");
+    minutesInput.attribute("min", "0.1");
+    minutesInput.attribute("max", "60");
+    minutesInput.attribute("step", "0.5");
+    minutesInput.style("width", "140px");
+    minutesInput.position(20, H + 20);
+  
+    minutesInput.input(() => {
+      if (!running) setDurationFromInput();
+    });
+  
+    setDurationFromInput();
+  }
+
   //testing (kept for now)
   p.setup = function () {
     p.createCanvas(W, H);
