@@ -152,6 +152,32 @@ registerSketch('sk2', function (p) {
     p.pop();
   }
 
+  function drawLegend() {
+    const x = plotRight() - 30;
+    const y = plotTop() - 40;
+    const sw = 14;
+    const gap = 8;
+
+    p.push();
+    p.noStroke();
+    p.fill(30);
+    p.textSize(12);
+    p.textAlign(p.LEFT, p.CENTER);
+
+    p.fill(220, 90, 90, 180);
+    p.rect(x, y, sw, sw, 3);
+    p.fill(30);
+    p.text("AM", x + sw + gap, y + sw / 2);
+
+    const y2 = y + sw + 8;
+    p.fill(90, 140, 220, 180);
+    p.rect(x, y2, sw, sw, 3);
+    p.fill(30);
+    p.text("PM", x + sw + gap, y2 + sw / 2);
+
+    p.pop();
+  }
+
 function drawSecondsBall(t) {
   const { h12, m } = t;
 
@@ -183,6 +209,7 @@ function drawSecondsBall(t) {
     drawLabels(12, 6, 4) //see above
     drawGraphEncoding(t)
     drawSecondsBall(t)
+    drawLegend();
   };
 
 });
