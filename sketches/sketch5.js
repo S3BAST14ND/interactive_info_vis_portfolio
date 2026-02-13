@@ -476,11 +476,11 @@ registerSketch("sk5", function (p) {
 
     p.fill(200, 0, 40);
     p.textSize(12);
-    p.text(`Earths needed for Dec 31: ${N.toFixed(2)}×`, textX, textY + 38);
+    p.text(`Earths needed: ${N.toFixed(2)}×`, textX, textY + 38);
 
     const spin = p.frameCount * 0.02;
     drawEarthIcon(cx1, cyD, r1, spin);
-    drawEarthIcon(cxN, cyD, rN, -spin);
+    drawEarthIcon(cxN, cyD, rN, spin);
 
     p.noStroke();
     p.fill(60);
@@ -572,7 +572,7 @@ registerSketch("sk5", function (p) {
   }
 
   function drawCenterEarth() {
-    const r = 18;
+    const r = 39;
     const spin = p.frameCount * 0.02;
     drawEarthIcon(cx, cy, r, spin);
 
@@ -580,26 +580,53 @@ registerSketch("sk5", function (p) {
     p.noStroke();
     p.fill(60);
     p.textAlign(p.CENTER, p.TOP);
-    p.text("1× Earth", cx, cy + r + 3);
     p.textSize(12);
     p.pop();
   }
 
-  function drawClickedPointEarthComparison() {
+  function drawSelectedIndicatorDot() {
     if (selectedIndex < 0 || selectedIndex >= points.length) return;
-
     const pt = points[selectedIndex];
-
-    const pLasted = clamp(pt.pctLasted, 1e-6, 100);
-    const N = 100 / pLasted;
-
-    const baseR = 18;
-    const rN = baseR * Math.sqrt(N);
-    const rClamped = Math.min(rN, 60);
-
-    const spin = p.frameCount * 0.02;
-    drawEarthIcon(pt.x, pt.y, rClamped, spin);
+  
+    const t = p.frameCount * 0.05;
+  
+    const pulse = 0.5 + 0.5 * Math.sin(t);
+  
+    const ringR = 22 + pulse * 8;
+    const ringAlpha = 60 + pulse * 140;
+  
+    p.push();
+  
+    p.noFill();
+    p.stroke(0, 0, 0, ringAlpha);
+    p.strokeWeight(3);
+    p.circle(pt.x, pt.y, ringR);
+  
+    p.noStroke();
+    p.fill(220, 0, 40);
+    p.circle(pt.x, pt.y, 9);
+  
+    p.fill(255);
+    p.circle(pt.x, pt.y, 3);
+  
+    p.pop();
   }
+  // Not currently needed
+  // function drawClickedPointEarthComparison() {
+  //   if (selectedIndex < 0 || selectedIndex >= points.length) return;
+
+  //   const pt = points[selectedIndex];
+
+  //   const pLasted = clamp(pt.pctLasted, 1e-6, 100);
+  //   const N = 100 / pLasted;
+
+  //   const baseR = 18;
+  //   const rN = baseR * Math.sqrt(N);
+  //   const rClamped = Math.min(rN, 60);
+
+  //   const spin = p.frameCount * 0.02;
+  //   drawEarthIcon(pt.x, pt.y, rClamped, spin);
+  // }
 
   p.draw = function () {
     p.background(250);
@@ -633,9 +660,9 @@ registerSketch("sk5", function (p) {
     drawPolarGrid();
     drawOvershootPathLine();
     drawFirstLastLabels();
+    drawSelectedIndicatorDot()
 
     drawCenterEarth();
-    drawClickedPointEarthComparison();
 
     drawHoverTooltip();
     drawRightPanel();
